@@ -88,6 +88,7 @@ void cv_line2(cv::Mat& img, const cv::Point& start, const cv::Point& end,
 }  // namespace
 
 void AnnotationRenderer::RenderDataOnImage(const RenderData& render_data) {
+    std::cerr<<" in RenderDataOnImage";
   for (const auto& annotation : render_data.render_annotations()) {
     if (annotation.data_case() == RenderAnnotation::kRectangle) {
       DrawRectangle(annotation);
@@ -166,13 +167,13 @@ void AnnotationRenderer::DrawRectangle(const RenderAnnotation& annotation) {
     const int kNumVertices = 4;
     cv::Point2f vertices[kNumVertices];
     rect.points(vertices);
-    for (int i = 0; i < kNumVertices; i++) {
+    /*for (int i = 0; i < kNumVertices; i++) {
       cv::line(mat_image_, vertices[i], vertices[(i + 1) % kNumVertices], color,
                thickness);
-    }
+    }*/
   } else {
-    cv::Rect rect(left, top, right - left, bottom - top);
-    cv::rectangle(mat_image_, rect, color, thickness);
+    //cv::Rect rect(left, top, right - left, bottom - top);
+    //cv::rectangle(mat_image_, rect, color, thickness );
   }
   if (rectangle.has_top_left_thickness()) {
     const auto& rect = RectangleToOpenCVRotatedRect(left, top, right, bottom,
@@ -182,9 +183,7 @@ void AnnotationRenderer::DrawRectangle(const RenderAnnotation& annotation) {
     rect.points(vertices);
     const int top_left_thickness =
         ClampThickness(round(rectangle.top_left_thickness() * scale_factor_));
-    cv::ellipse(mat_image_, vertices[1],
-                cv::Size(top_left_thickness, top_left_thickness), 0.0, 0, 360,
-                color, -1);
+    //cv::ellipse(mat_image_, vertices[1],cv::Size(top_left_thickness, top_left_thickness), 0.0, 0, 360,color, -1);
   }
 }
 
@@ -457,7 +456,7 @@ void AnnotationRenderer::DrawPoint(const RenderAnnotation& annotation) {
   const cv::Scalar color = MediapipeColorToOpenCVColor(annotation.color());
   const int thickness =
       ClampThickness(round(annotation.thickness() * scale_factor_));
-  cv::circle(mat_image_, point_to_draw, thickness, color, -1);
+  //cv::circle(mat_image_, point_to_draw, thickness, color, -1);
 }
 
 void AnnotationRenderer::DrawLine(const RenderAnnotation& annotation) {
@@ -485,7 +484,7 @@ void AnnotationRenderer::DrawLine(const RenderAnnotation& annotation) {
   const cv::Scalar color = MediapipeColorToOpenCVColor(annotation.color());
   const int thickness =
       ClampThickness(round(annotation.thickness() * scale_factor_));
-  cv::line(mat_image_, start, end, color, thickness);
+  //cv::line(mat_image_, start, end, color, thickness);
 }
 
 void AnnotationRenderer::DrawGradientLine(const RenderAnnotation& annotation) {
